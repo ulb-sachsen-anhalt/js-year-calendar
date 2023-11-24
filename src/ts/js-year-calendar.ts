@@ -538,8 +538,13 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			table.appendChild(thead);
 			
 			/* Days */
-			var currentDate = new Date(monthStartDate.getTime());
+			var currentDate = new Date(monthStartDate.getTime());			
 			var lastDate = new Date(monthStartDate.getFullYear(), monthStartDate.getMonth() + 1, 0);
+			
+			// fix for problems in 1893 with timezone switch on 1.April from GMT+0053 to GMT+0100 (Berlin,...)
+			if (currentDate.getMinutes() > 0) {
+			    lastDate.setMinutes(currentDate.getMinutes(), currentDate.getSeconds(), currentDate.getMilliseconds());
+			}
 			
 			while (currentDate.getDay() != weekStart)
 			{
